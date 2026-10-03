@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AudioTwizz - your local music on Discord</title>
+<meta name="description" content="AudioTwizz shows what your local music player is playing on Discord, with title, artist, album, cover art and a live progress bar. Free for Windows.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B5%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08060d;--panel:#120e1b;--panel2:#1b1528;--line:#261d3a;--text:#f1ecfa;--sub:#b6aacb;--muted:#7f7396;--acc:#9d5cff;--acc2:#8540ee;--lav:#c9b6ff;
+--disp:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#f7f4fc;--panel:#fff;--panel2:#efe9fa;--line:#ddd2f1;--text:#1a1326;--sub:#4d4262;--muted:#7a6f90;--lav:#6a3fc4}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);height:auto}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.6 var(--body);transition:background .3s}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60vw 50vh at 78% 8%,color-mix(in srgb,var(--acc) 22%,transparent),transparent 70%)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.logo{font:800 22px var(--disp);text-decoration:none;display:flex;gap:10px;align-items:center}
+.logo i{width:26px;height:26px;border-radius:8px;background:var(--acc);display:grid;place-items:center;transition:background .3s}
+.logo svg{width:15px;height:15px;fill:#fff}
+nav .links{display:flex;gap:22px;align-items:center;font-size:15px;color:var(--sub)}
+nav .links a{text-decoration:none}nav .links a:hover{color:var(--text)}
+.theme{background:none;border:1px solid var(--line);color:var(--sub);border-radius:99px;width:36px;height:36px;cursor:pointer;font-size:16px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:56px 0 88px}
+h1{font:800 clamp(40px,6.2vw,72px)/1.02 var(--disp);letter-spacing:-.03em;margin:0 0 22px}
+.lead{color:var(--sub);font-size:19px;max-width:30em;margin:0 0 30px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:12px;background:var(--acc);color:#fff;font-weight:700;text-decoration:none;border:0;transition:background .2s,transform .15s}
+.btn:hover{background:var(--acc2);transform:translateY(-1px)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.ghost:hover{background:var(--panel2)}
+.small{font-size:14px;color:var(--muted);margin-top:16px}
+/* presence card */
+.stage{position:relative}
+.dc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 30px 80px -30px color-mix(in srgb,var(--acc) 55%,transparent)}
+.dc .top{font:700 12px var(--body);color:var(--sub);margin-bottom:12px}
+.dc .row{display:flex;gap:16px}
+.cover{position:relative;flex:none;width:104px;height:104px;border-radius:10px;transition:background .6s}
+.cover::after{content:"";position:absolute;right:-6px;bottom:-6px;width:26px;height:26px;border-radius:50%;background:#1ed760;border:3px solid var(--panel);
+background-image:linear-gradient(#000,#000),linear-gradient(#000,#000),linear-gradient(#000,#000);background-repeat:no-repeat;background-size:2px 8px,2px 12px,2px 6px;background-position:6px 7px,10px 4px,14px 9px}
+.meta{min-width:0;flex:1}
+.meta b{display:block;font:700 18px/1.25 var(--body)}
+.meta span{display:block;color:var(--sub);font-size:15px}
+.meta small{display:block;color:var(--muted);font-size:13px}
+.bar{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--acc);transition:background .3s}
+.dc .cta{margin-top:14px;display:block;text-align:center;padding:8px;border-radius:8px;background:var(--panel2);font-weight:700;font-size:14px;color:var(--text);text-decoration:none}
+.sw{display:flex;gap:10px;margin-top:20px;align-items:center;color:var(--muted);font-size:14px}
+.sw button{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+.sw button[aria-pressed="true"]{border-color:var(--text)}
+section{padding:72px 0;border-top:1px solid var(--line)}
+h2{font:800 clamp(28px,4vw,42px)/1.1 var(--disp);letter-spacing:-.02em;margin:0 0 14px;max-width:16em}
+.sub{color:var(--sub);max-width:34em;margin:0 0 40px}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:0 56px}
+.feat div{padding:20px 0;border-top:1px solid var(--line)}
+.feat h3{font:700 18px var(--body);margin:0 0 4px}
+.feat p{margin:0;color:var(--sub);font-size:16px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;counter-reset:s;padding:0;list-style:none;margin:0}
+.steps li{counter-increment:s;padding-top:18px;border-top:2px solid var(--acc);transition:border-color .3s}
+.steps li::before{content:counter(s);font:800 34px var(--disp);color:var(--acc);display:block;transition:color .3s}
+.steps h3{margin:6px 0 4px;font:700 18px var(--body)}
+.steps p{margin:0;color:var(--sub);font-size:16px}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pkg{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px}
+.pkg h3{font:800 24px var(--disp);margin:0 0 6px}
+.pkg p{margin:0 0 18px;color:var(--sub);font-size:16px}
+.hash{margin-top:16px;font:12px/1.5 ui-monospace,Consolas,monospace;color:var(--muted);word-break:break-all}
+.note{margin-top:28px;padding:18px 22px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 12px 12px 0;color:var(--sub);font-size:15px;max-width:48em}
+footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:820px){.hero{grid-template-columns:1fr;gap:40px;padding-top:24px}.feat,.dl,.steps{grid-template-columns:1fr}nav .links a.hide{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="logo" href="#"><i><svg viewBox="0 0 24 24"><path d="M9 3v11.3A4 4 0 1 0 11 18V8h7V3z"/></svg></i>AudioTwizz</a>
+  <div class="links"><a class="hide" href="#features">Features</a><a class="hide" href="#install">Install</a><a href="#download">Download</a><button class="theme" id="theme" aria-label="Switch light or dark theme">☾</button></div>
+</nav>
+
+<header class="hero">
+  <div>
+    <h1>Let Discord hear what you're playing.</h1>
+    <p class="lead">AudioTwizz reads whatever your Windows music player is playing and shows it on your Discord profile: title, artist, album, cover art and a live progress bar. All taken from your own files.</p>
+    <div class="btns">
+      <a class="btn" href="download/AudioTwizzSetup.exe" download>Download for Windows</a>
+      <a class="btn ghost" href="#features">See what it does</a>
+    </div>
+    <p class="small">Free · Windows 10 and 11 · Version 7.7 · Installs without admin rights</p>
+  </div>
+  <div class="stage">
+    <div class="dc" aria-label="Example of an AudioTwizz status on Discord">
+      <div class="top">Listening to Local Music</div>
+      <div class="row">
+        <div class="cover" id="cover"></div>
+        <div class="meta"><b id="t">Night Drive</b><span id="a">Velvet Static</span><small id="al">Low Tide Hours</small>
+          <div class="bar"><span id="cur">0:00</span><div class="track"><i id="fill"></i></div><span id="dur">3:42</span></div></div>
+      </div>
+      <a class="cta" href="#download">Open this song</a>
+    </div>
+    <div class="sw" id="sw">Accent <span style="flex:1"></span></div>
+  </div>
+</header>
+</div>
+
+<section id="features"><div class="wrap">
+  <h2>Everything on your status comes from your own music.</h2>
+  <p class="sub">No streaming account needed. If your player shows up in the Windows media controls, AudioTwizz can read it.</p>
+  <div class="feat">
+    <div><h3>Works with most players</h3><p>VLC, MusicBee, Windows Media Player, foobar2000, Spotify and browsers all report to Windows, so AudioTwizz sees them.</p></div>
+    <div><h3>Cover art from your files</h3><p>Reads tags in mp3, flac, m4a, ogg, opus and wma. No cover inside? It checks the folder, the player, then an online lookup.</p></div>
+    <div><h3>Your layout, your words</h3><p>Rearrange title, artist and album with templates, pick a preset, or flip the order to Title - Artist.</p></div>
+    <div><h3>Privacy when you need it</h3><p>Hide your status with Ctrl+Alt+H, while a chosen app is open, in fullscreen, or during quiet hours.</p></div>
+    <div><h3>Mini mode and tray</h3><p>A small always-on-top widget with adjustable opacity, plus a tray icon so it stays out of your way.</p></div>
+    <div><h3>Links and accents</h3><p>Add two buttons of your own to your profile, and pick an accent colour, or let it follow the cover art.</p></div>
+  </div>
+</div></section>
+
+<section id="install"><div class="wrap">
+  <h2>Set up in three steps.</h2>
+  <p class="sub">The installer does the heavy lifting, including Python if you don't have it yet.</p>
+  <ol class="steps">
+    <li><h3>Run the installer</h3><p>It installs into your user folder, adds a Desktop and Start menu shortcut, and needs no admin rights.</p></li>
+    <li><h3>Add your Discord app</h3><p>Create a free application in the Discord Developer Portal and paste its ID into AudioTwizz. Setup links you straight to it.</p></li>
+    <li><h3>Press play</h3><p>Start any music. Your status appears on Discord within a couple of seconds and follows each song.</p></li>
+  </ol>
+</div></section>
+
+<section id="download"><div class="wrap">
+  <h2>Download AudioTwizz.</h2>
+  <p class="sub">Two files, nothing else. AudioTwizz checks for updates on start and every six hours, and asks before it installs one.</p>
+  <div class="dl">
+    <div class="pkg"><h3>Setup</h3><p>Installs AudioTwizz for the current Windows user.</p>
+      <a class="btn" href="download/AudioTwizzSetup.exe" download>AudioTwizzSetup.exe</a>
+      <div class="hash">SHA-256<br>7eaee143914b8941ad091a8bf3b3ebc2bbb23236cefda6ef877757b1ec66bf9b</div></div>
+    <div class="pkg"><h3>Uninstall</h3><p>Removes the app, shortcuts and startup entry.</p>
+      <a class="btn ghost" href="download/AudioTwizzUninstall.exe" download>AudioTwizzUninstall.exe</a>
+      <div class="hash">SHA-256<br>796cf4f624de02109c27a44e2001a0dda875db4563ee4fe9d5932cbddc6373a3</div></div>
+  </div>
+  <p class="note">Windows SmartScreen may say the app is from an unknown publisher, because the installer isn't code-signed yet. Choose <b>More info</b>, then <b>Run anyway</b>. To check your download, compare its SHA-256 with the one above.</p>
+</div></section>
+
+<div class="wrap"><footer><span>AudioTwizz · Not affiliated with or endorsed by Discord.</span><a href="#">Back to top</a></footer></div>
+
+<script>
+// accent switcher (same colours as the app)
+var ACC={Purple:["#9d5cff","#8540ee"],Pink:["#f0529c","#c93f82"],Teal:["#22c1b8","#199b94"],Orange:["#f59e42","#cf7f2c"],Green:["#2bb673","#1f9460"],Red:["#f2555a","#cc4146"]};
+var root=document.documentElement,sw=document.getElementById("sw");
+Object.keys(ACC).forEach(function(n){var b=document.createElement("button");b.style.background=ACC[n][0];b.title=n;b.setAttribute("aria-label",n+" accent");b.setAttribute("aria-pressed",n==="Purple");
+b.onclick=function(){root.style.setProperty("--acc",ACC[n][0]);root.style.setProperty("--acc2",ACC[n][1]);sw.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",x===b)})};sw.appendChild(b)});
+// theme
+var th=document.getElementById("theme");
+th.onclick=function(){var l=root.getAttribute("data-theme")==="light";root.setAttribute("data-theme",l?"dark":"light");th.textContent=l?"☾":"☀"};
+// now-playing demo (made-up songs)
+var S=[["Night Drive","Velvet Static","Low Tide Hours",222,"#5b2bd6,#e0559c"],["Paper Moons","Halo Avenue","Soft Machines",195,"#1fa9a0,#2a2f7a"],["Slow Burn","The Ember Club","Afterglow",248,"#f59e42,#9d2f5a"]];
+var i=0,t0=Date.now(),el=function(x){return document.getElementById(x)};
+function fmt(s){s=Math.floor(s);return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
+function load(){var s=S[i];el("t").textContent=s[0];el("a").textContent=s[1];el("al").textContent=s[2];el("dur").textContent=fmt(s[3]);el("cover").style.background="linear-gradient(135deg,"+s[4]+")";t0=Date.now()-Math.random()*40000}
+function tick(){var s=S[i],e=(Date.now()-t0)/1000;if(e>=s[3]){i=(i+1)%S.length;load();return}el("cur").textContent=fmt(e);el("fill").style.width=(e/s[3]*100)+"%"}
+load();setInterval(tick,500);tick();
+document.getElementById("cover").onclick=function(){i=(i+1)%S.length;load()};
+</script>
+</body>
+</html>
