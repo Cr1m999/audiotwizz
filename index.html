@@ -114,13 +114,41 @@ h2{font:800 clamp(30px,4.2vw,46px)/1.08 var(--disp);letter-spacing:-.025em;margi
 footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 @media(max-width:900px){.hero{grid-template-columns:1fr;gap:48px;padding-top:24px}.feat,.dl,.steps{grid-template-columns:1fr}nav .links a.hide{display:none}.dprof{transform:none!important}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.dprof{transform:none!important}}
+
+.stage{position:relative}.stage::before{content:"";position:absolute;inset:-12% -8%;z-index:-1;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 30%,transparent),transparent);filter:blur(30px)}
+nav .links{box-shadow:0 10px 30px -18px #000}
+h1{background:linear-gradient(180deg,var(--text) 55%,color-mix(in srgb,var(--text) 55%,var(--acc)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.bc{grid-column:span 2;background:linear-gradient(180deg,color-mix(in srgb,var(--panel2) 55%,var(--panel)),var(--panel));border:1px solid var(--line);border-radius:22px;padding:26px;overflow:hidden}
+.bc.w{grid-column:span 4}.bc.t{grid-column:span 3}
+.bc h3{font:800 22px var(--disp);margin:0 0 6px;letter-spacing:-.01em}
+.bc p{margin:0;color:var(--sub);font-size:15px;max-width:32em}
+.vis{margin-top:22px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.node{font-size:13px;border:1px solid var(--line);border-radius:10px;padding:6px 12px;background:var(--bg);color:var(--sub)}
+.node.on{border-color:var(--acc);color:var(--text)}.arr{color:var(--muted);font-size:13px}
+kbd{font:700 13px var(--body);background:var(--bg);border:1px solid var(--line);border-bottom-width:3px;border-radius:8px;padding:4px 10px;color:var(--text)}
+.mini{display:flex;gap:10px;align-items:center;background:#111214;color:#f2f3f5;border-radius:12px;padding:10px 16px 10px 10px;font-size:13px;line-height:1.3;box-shadow:0 14px 30px -14px #000}
+.mini i{width:42px;height:42px;border-radius:6px;background:center/cover;flex:none}.mini span{color:#b5bac1;display:block}
+.dotsw{width:22px;height:22px;border-radius:50%}
+.upd{display:grid;grid-template-columns:1fr 400px;gap:56px;align-items:center}
+.ver{display:inline-flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:6px 16px;font-size:14px;color:var(--sub);margin-bottom:26px}
+.ver b{color:var(--text)}.ver .d{width:8px;height:8px;border-radius:50%;background:#23a55a;box-shadow:0 0 0 4px rgba(35,165,90,.2)}
+.facts{display:grid;gap:0}.facts div{padding:16px 0;border-top:1px solid var(--line)}.facts h3{margin:0 0 2px;font:700 18px var(--body)}.facts p{margin:0;color:var(--sub);font-size:15.5px}
+.dlg{background:#1e1f22;color:#f2f3f5;border-radius:10px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 40px 80px -30px color-mix(in srgb,var(--acc) 60%,#000);overflow:hidden;font-size:14px}
+.dlg .tb{background:#111214;padding:9px 14px;font-weight:700;font-size:12px;color:#b5bac1}
+.dlg .bd{padding:18px 18px 8px;min-height:176px}.dlg .bd b{display:block;margin-bottom:8px}.dlg .bd p{margin:0 0 8px;color:#b5bac1}
+.dlg .ft{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px 16px}
+.dlg button{font:500 14px var(--body);border:0;border-radius:4px;padding:8px 16px;cursor:pointer;color:#fff;background:#4e5058}.dlg button.p{background:var(--acc)}
+.dlg .pg{height:6px;border-radius:6px;background:#4e5058;overflow:hidden;margin:16px 0 8px}.dlg .pg i{display:block;height:100%;width:0;background:var(--acc);transition:width .7s}
+.eg{font-size:12px;color:var(--muted);text-align:center;margin-top:12px}
+@media(max-width:900px){.bc,.bc.w,.bc.t{grid-column:span 6}.upd{grid-template-columns:1fr;gap:36px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <nav>
   <a class="logo" href="#"><i><svg viewBox="0 0 24 24"><path d="M9 3v11.3A4 4 0 1 0 11 18V8h7V3z"/></svg></i>AudioTwizz</a>
-  <div class="links"><a class="hide" href="#features">Features</a><a class="hide" href="#install">Install</a><a class="hide" href="#faq">FAQ</a><a class="go" href="#download">Download</a><button class="theme" id="theme" aria-label="Switch light or dark theme">&#9790;</button></div>
+  <div class="links"><a class="hide" href="#features">Features</a><a class="hide" href="#updates">Updates</a><a class="hide" href="#install">Install</a><a class="hide" href="#faq">FAQ</a><a class="go" href="#download">Download</a><button class="theme" id="theme" aria-label="Switch light or dark theme">&#9790;</button></div>
 </nav>
 
 <header class="hero">
@@ -131,7 +159,7 @@ footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);f
       <a class="btn" href="download/AudioTwizzSetup.exe" download><svg viewBox="0 0 24 24"><path d="M12 3v11.2l4.3-4.3 1.4 1.4L12 17 6.3 11.3l1.4-1.4 4.3 4.3V3zM5 19h14v2H5z"/></svg>Download for Windows</a>
       <a class="btn ghost" href="#features">See what it does</a>
     </div>
-    <p class="small">Free &middot; Windows 10 and 11 &middot; Version 7.7 &middot; No admin rights needed</p>
+    <p class="small">Free &middot; Windows 10 and 11 &middot; Version <span class="lvv">7.7</span> &middot; No admin rights needed</p>
     <div class="chips"><span>VLC</span><span>MusicBee</span><span>foobar2000</span><span>Windows Media Player</span><span>Spotify</span><span>Browsers</span></div>
   </div>
 
@@ -164,13 +192,38 @@ footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);f
 <section id="features"><div class="wrap">
   <h2>Everything on your status comes from your own music.</h2>
   <p class="sub">No streaming account needed. If your player shows up in the Windows media controls, AudioTwizz can read it. Try the presets and accents above to see how the status can look.</p>
-  <div class="feat">
-    <div><h3>Works with most players</h3><p>VLC, MusicBee, Windows Media Player, foobar2000, Spotify and browsers all report to Windows, so AudioTwizz sees them.</p></div>
-    <div><h3>Cover art from your files</h3><p>Reads tags in mp3, flac, m4a, ogg, opus and wma. No cover inside? It checks the folder, the player, then an online lookup.</p></div>
-    <div><h3>Your layout, your words</h3><p>Arrange title, artist and album with templates, pick a preset, or flip the order to Title - Artist.</p></div>
-    <div><h3>Privacy when you need it</h3><p>Hide your status with Ctrl+Alt+H, while a chosen app is open, in fullscreen, or during quiet hours.</p></div>
-    <div><h3>Mini mode and tray</h3><p>A small always-on-top widget with adjustable opacity, plus a tray icon so it stays out of your way.</p></div>
-    <div><h3>Links and accents</h3><p>Add two buttons of your own to your profile, and pick an accent colour, or let it follow the cover art.</p></div>
+  <div class="bento">
+    <div class="bc w"><h3>Cover art from your files</h3><p>Reads tags in mp3, flac, m4a, ogg, opus and wma, then falls back step by step so there's a cover whenever one can be found.</p>
+      <div class="vis"><span class="node on">Tags in the file</span><span class="arr">&rarr;</span><span class="node">Folder art</span><span class="arr">&rarr;</span><span class="node">Player thumbnail</span><span class="arr">&rarr;</span><span class="node">Online lookup</span></div></div>
+    <div class="bc"><h3>Works with most players</h3><p>Anything that reports to Windows media controls.</p>
+      <div class="vis"><span class="node">VLC</span><span class="node">MusicBee</span><span class="node">foobar2000</span><span class="node">Spotify</span><span class="node">Browsers</span></div></div>
+    <div class="bc"><h3>Your layout, your words</h3><p>Templates, presets, and Title - Artist order.</p>
+      <div class="vis"><span class="node on">{title}</span><span class="node">{artist}</span><span class="node">{album}</span><span class="node">{year}</span></div></div>
+    <div class="bc"><h3>Privacy when you need it</h3><p>Hide your status on a hotkey, while chosen apps run, in fullscreen, or during quiet hours.</p>
+      <div class="vis"><kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>H</kbd></div></div>
+    <div class="bc"><h3>Mini mode</h3><p>A small always-on-top widget with adjustable opacity.</p>
+      <div class="vis"><div class="mini"><i class="cvimg"></i><div><b>Twizzy Rich</b><span>Yeat</span></div></div></div></div>
+    <div class="bc t"><h3>Links and accents</h3><p>Add two buttons of your own to your profile, and pick an accent colour or let it follow the cover art.</p>
+      <div class="vis"><i class="dotsw" style="background:#9d5cff"></i><i class="dotsw" style="background:#f0529c"></i><i class="dotsw" style="background:#22c1b8"></i><i class="dotsw" style="background:#f59e42"></i><i class="dotsw" style="background:#2bb673"></i><i class="dotsw" style="background:#f2555a"></i></div></div>
+    <div class="bc t"><h3>Quiet in the tray</h3><p>Closes to the tray, can start with Windows, and can show a small notification when the song changes.</p></div>
+  </div>
+</div></section>
+
+
+<section id="updates"><div class="wrap">
+  <h2>Updates that install themselves.</h2>
+  <p class="sub">New versions reach everyone without a new download. AudioTwizz asks first and never changes anything on its own.</p>
+  <div class="upd">
+    <div>
+      <div class="ver"><span class="d"></span>Latest version <b id="lv">v7.7</b><span id="ld"></span></div>
+      <div class="facts">
+        <div><h3>Checks on its own</h3><p>When AudioTwizz starts and every six hours after that. You can also press Check for updates in Settings.</p></div>
+        <div><h3>One question, no nagging</h3><p>You get a single "Update now?" with what's new. Say not now and it won't ask again until you restart.</p></div>
+        <div><h3>Checked before it's installed</h3><p>The download is verified against its checksum first, so a bad download can't break your install.</p></div>
+        <div><h3>Your settings stay put</h3><p>They live in their own folder, separate from the app files an update replaces.</p></div>
+      </div>
+    </div>
+    <div><div class="dlg" id="dlg"></div><p class="eg">Example of the update prompt. Try it.</p></div>
   </div>
 </div></section>
 
@@ -204,6 +257,7 @@ footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);f
     <details><summary>Do I need Python?</summary><p>The installer looks for a compatible Python and installs one for you if it can't find it. This happens once.</p></details>
     <details><summary>Does it work with Spotify and my browser?</summary><p>Yes. Anything that reports to the Windows media controls works, and streaming songs get a button that opens the song.</p></details>
     <details><summary>Can I hide my status?</summary><p>Yes. Press Ctrl+Alt+H, or set it to hide automatically while certain apps run, in fullscreen, or at set quiet hours.</p></details>
+    <details><summary>How do updates work?</summary><p>AudioTwizz checks for a new version on start and every six hours, asks before installing, then closes and reopens by itself. You never need to download the installer again.</p></details>
     <details><summary>How do I remove it?</summary><p>Run AudioTwizzUninstall.exe from the download section above.</p></details>
   </div>
 </div></section>
@@ -236,6 +290,26 @@ var pr=$("pre");Object.keys(P).forEach(function(n){var b=document.createElement(
 b.onclick=function(){preset=n;pr.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()};pr.appendChild(b)});
 $("cv").onclick=function(){i=(i+1)%S.length;load()};
 load();setInterval(tick,500);tick();
+
+// cover for mini widget
+document.querySelectorAll(".cvimg").forEach(function(e){e.style.backgroundImage="url("+COVER+")"});
+// update prompt demo
+var LV="7.7",dlg=$("dlg");
+function prev(v){var m=v.split(".");return m[1]&&+m[1]>0?m[0]+"."+(+m[1]-1):v}
+function prompt1(){dlg.innerHTML='<div class="tb">AudioTwizz</div><div class="bd"><b>Version '+LV+' is available (you have '+prev(LV)+').</b><p>Update now? AudioTwizz will close and reopen automatically.</p><p>What\u2019s new:<br>Smoother cover art and a few fixes.</p></div><div class="ft"><button id="no">Not now</button><button class="p" id="yes">Update now</button></div>';
+ $("no").onclick=function(){dlg.querySelector(".bd").innerHTML="<b>No problem.</b><p>AudioTwizz won't ask again until you restart it.</p>";dlg.querySelector(".ft").innerHTML='<button id="rp">Replay</button>';$("rp").onclick=prompt1};
+ $("yes").onclick=run}
+function run(){var st=["Downloading the update\u2026","Checking the file\u2026","Installing\u2026","Reopening AudioTwizz\u2026"],k=0;
+ dlg.innerHTML='<div class="tb">AudioTwizz</div><div class="bd"><b id="stt"></b><div class="pg"><i id="pgi"></i></div></div><div class="ft"></div>';
+ (function step(){if(k>=st.length){dlg.innerHTML='<div class="tb">AudioTwizz</div><div class="bd"><b>You\u2019re up to date (v'+LV+').</b><p>Your settings are exactly as you left them.</p></div><div class="ft"><button id="rp">Replay</button></div>';$("rp").onclick=prompt1;return}
+  $("stt").textContent=st[k];$("pgi").style.width=((k+1)/st.length*100)+"%";k++;setTimeout(step,900)})()}
+prompt1();
+// live version from the update server
+fetch("https://cr1m999.github.io/audiotwizz-updates/api/latest",{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){
+ if(!d||!d.version)return;LV=String(d.version);$("lv").textContent="v"+LV;
+ document.querySelectorAll(".lvv").forEach(function(e){e.textContent=LV});
+ if(d.published_at)$("ld").textContent=" \u00b7 "+new Date(d.published_at*1000).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+ prompt1()}).catch(function(){});
 // gentle tilt on hover (desktop only)
 var tl=$("tilt");if(matchMedia("(hover:hover) and (min-width:901px) and (prefers-reduced-motion:no-preference)").matches){
  tl.parentNode.addEventListener("mousemove",function(e){var r=tl.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tl.style.transform="rotateY("+(x*12)+"deg) rotateX("+(-y*10)+"deg)"});
